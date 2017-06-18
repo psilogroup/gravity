@@ -1,0 +1,7 @@
+# depslib dependency file v1.0
+1439179455 source:/home/gabriel/codes/Gravit/gravit.c
+	<SDL2/SDL.h>
+	<stdio.h>
+	<stdlib.h>
+	<math.h>
+
