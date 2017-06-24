@@ -4,7 +4,7 @@ project(gravity)
 set(CMAKE_CXX_STANDARD 11)
 
 set(SOURCE_FILES
-        gravit.c)
+        gravit.cpp Timer.cpp Timer.h)
 
 find_package(sdl2 REQUIRED)
 

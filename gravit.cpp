@@ -1,12 +1,14 @@
 //Using SDL and standard IO
 #include <SDL2/SDL.h>
+#include "Timer.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
+#include <sstream>
 
 //power of two
 #define N 1024
-
+#define FRAMES_PER_SECOND 30
 #define default_mass_maximum    1.5e3 /* kg */
 #define default_domain_size      270 /* m  */
 
@@ -42,6 +44,13 @@ float EPS = 1;
 float rx, ry, rz;
 float d, f;
 float G = 6.670e-11;
+
+int frame = 0;
+//Timer used to calculate the frames per second
+Timer fps;
+
+//Timer used to update the caption
+Timer update;
 
 float deg2Rad = M_PI/180.0f;
 void initializ()
@@ -158,34 +167,46 @@ int main( int argc, char* args[] )
             if( gRenderer == NULL )
             {
                 printf( "Renderer could not be created! SDL Error: %s\n", SDL_GetError() );
-
             }
             else
             {
                 //Initialize renderer color
                 SDL_SetRenderDrawColor( gRenderer, 0x00, 0x00, 0x00, 0xFF );
 
-
-
             }
-            while(quit == 0)
-            {
-                while( SDL_PollEvent( &e ) != 0 )
-                {
+
+            fps.start();
+            update.start();
+            while (quit == 0) {
+                //update.start();
+                fps.start();
+
+                while (SDL_PollEvent(&e) != 0) {
                     //User requests quit
-                    if( e.type == SDL_QUIT )
-                    {
+                    if (e.type == SDL_QUIT) {
                         quit = 1;
                     }
                 }
 
                 mainLoop();
 
+
+                frame++;
+                int avgFPS = frame / (fps.get_ticks() / 1000.f);
+                if (avgFPS > FRAMES_PER_SECOND) {
+                    int delay = (1000.0f / FRAMES_PER_SECOND) - fps.get_ticks();
+                    if (delay > 0)
+                        SDL_Delay(delay);
+                }
+
+
+                //std::stringstream caption;
+
+                //caption << "GRAVITY FPS: " <<  floor(frame / ( update.get_ticks() / 1000.f ));
+                //SDL_SetWindowTitle(window, caption.str().c_str());
+
+
             }
-
-
-            //Wait two seconds
-
         }
     }
 
